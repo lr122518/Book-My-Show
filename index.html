@@ -228,69 +228,84 @@
   </section>
 
   <script>
-    const movies = [
-      { id: "RRR", title: "RRR", img: "images/rrr.jpeg" },
-      { id: "KGF", title: "KGF", img: "images/kgf.jpeg" },
-      { id: "Pushpa", title: "Pushpa", img: "images/pushpa.jpeg" },
-      { id: "Inception", title: "Inception", img: "images/inception.jpg" },
-      { id: "Avatar", title: "Avatar", img: "images/avatar.jpeg" },
-      { id: "see-all-movies", title: "See All", img: "images/see_all.jpeg" }
-    ];
+const movies = [
+  { id: "RRR", title: "RRR", img: "images/rrr.jpeg" },
+  { id: "KGF", title: "KGF", img: "images/kgf.jpeg" },
+  { id: "Pushpa", title: "Pushpa", img: "images/pushpa.jpeg" },
+  { id: "Inception", title: "Inception", img: "images/inception.jpg" },
+  { id: "Avatar", title: "Avatar", img: "images/avatar.jpeg" },
+  { id: "see-all-movies", title: "See All", img: "images/see_all.jpeg" }
+];
 
-    const liveEvents = [
-      { id: "Hyderabad Concert", title: "Concert", img: "images/concert.jpeg" },
-      { id: "Bangalore Drama Show", title: "Drama Show", img: "images/drama_show.jpeg" },
-      { id: "Chennai Stand-up Night", title: " Stand-up Night", img: "images/Stand-up Night.jpeg" },
-      { id: "Mumbai Jazz Festival", title: " Jazz Festival", img: "images/jazz.jpeg" },
-      { id: "Delhi Theater Play", title: " Theater Play", img: "images/theater.jpeg" },
-      { id: "see-all-live-events", title: "See All", img: "images/see_all.jpeg" }
-    ];
+const liveEvents = [
+  { id: "Hyderabad Concert", title: "Concert", img: "images/concert.jpeg" },
+  { id: "Bangalore Drama Show", title: "Drama Show", img: "images/drama_show.jpeg" },
+  { id: "Chennai Stand-up Night", title: "Stand-up Night", img: "images/standup_night.jpeg" },
+  { id: "Mumbai Jazz Festival", title: "Jazz Festival", img: "images/jazz.jpeg" },
+  { id: "Delhi Theater Play", title: "Theater Play", img: "images/theater.jpeg" },
+  { id: "see-all-live-events", title: "See All", img: "images/see_all.jpeg" }
+];
 
-    const sportsEvents = [
-      { id: "Football", title: "Football", img: "images/football.jpeg" },
-      { id: "Cricket", title: "Cricket", img: "images/cricket.jpeg" },
-      { id: "Kabaddi", title: "Kabaddi", img: "images/kabaddi.jpg" },
-      { id: "Hockey", title: "Hockey", img: "images/hockey.jpeg" },
-      { id: "Volleyball", title: "Volleyball", img: "images/valleyball.jpeg" },
-      { id: "see-all-sports", title: "See All", img: "images/see_all.jpeg" }
-    ];
+const sportsEvents = [
+  { id: "Football", title: "Football", img: "images/football.jpeg" },
+  { id: "Cricket", title: "Cricket", img: "images/cricket.jpeg" },
+  { id: "Kabaddi", title: "Kabaddi", img: "images/kabaddi.jpg" },
+  { id: "Hockey", title: "Hockey", img: "images/hockey.jpeg" },
+  { id: "Volleyball", title: "Volleyball", img: "images/valleyball.jpeg" },
+  { id: "see-all-sports", title: "See All", img: "images/see_all.jpeg" }
+];
 
-    const kidsSessions = [
-      { id: "Toddler Playtime", title: "Toddler Playtime", img: "images/toddler_playtime.jpeg" },
-      { id: "Creative Arts", title: "Creative Arts", img: "images/creative_arts.jpeg" },
-      { id: "Storytelling Hour", title: "Storytelling Hour", img: "images/storytelling_hour.jpeg" },
-      { id: "Music & Dance", title: "Music & Dance", img: "images/music_dance.jpeg" },
-      { id: "Outdoor Games", title: "Outdoor Games", img: "images/outdoor_games.jpeg" },
-      { id: "see-all-kids", title: "See All", img: "images/see_all.jpeg" }
-    ];
+const kidsSessions = [
+  { id: "Toddler Playtime", title: "Toddler Playtime", img: "images/toddler_playtime.jpeg" },
+  { id: "Creative Arts", title: "Creative Arts", img: "images/creative_arts.jpeg" },
+  { id: "Storytelling Hour", title: "Storytelling Hour", img: "images/storytelling_hour.jpeg" },
+  { id: "Music & Dance", title: "Music & Dance", img: "images/music_dance.jpeg" },
+  { id: "Outdoor Games", title: "Outdoor Games", img: "images/outdoor_games.jpeg" },
+  { id: "see-all-kids", title: "See All", img: "images/see_all.jpeg" }
+];
 
-    function renderEventCards(containerId, events, category, seeAllRedirect) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = "";
-      events.forEach(event => {
-        const card = document.createElement("div");
-        card.className = "event-card";
-        card.innerHTML = `<img src="${event.img}" alt="${event.title}"><p>${event.title}</p>`;
-        if(event.id.startsWith("see-all")) {
-          card.onclick = () => window.location.href = seeAllRedirect;
-          card.className ="see-all-visibility";
-        } else {
-          card.onclick = () => {
-            localStorage.setItem("selectedEventId", event.id);
-            localStorage.setItem("selectedEventTitle", event.title);
-            localStorage.setItem("selectedCategory", category);
-            window.location.href = "select-location.html";
-          };
+function renderEventCards(containerId, events, category, seeAllRedirect) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
+  events.forEach(event => {
+    const card = document.createElement("div");
+    card.className = "event-card";
+    card.innerHTML = `<img src="${event.img}" alt="${event.title}"><p>${event.title}</p>`;
+
+    if (event.id.startsWith("see-all")) {
+      card.onclick = () => window.location.href = seeAllRedirect;
+      card.classList.add("see-all-visibility");
+    } else {
+      card.onclick = () => {
+        // Common fields
+        localStorage.setItem("selectedEventId", event.id);
+        localStorage.setItem("selectedEventTitle", event.title);
+        localStorage.setItem("selectedCategory", category);
+
+        // ✅ Category-specific keys for easier retrieval
+        if (category === "Movie") {
+          localStorage.setItem("movie", event.id);
+        } else if (category === "Live Event") {
+          localStorage.setItem("liveEvent", event.id);
+        } else if (category === "Sport") {
+          localStorage.setItem("sport", event.id);
+        } else if (category === "Kids") {
+          localStorage.setItem("kidsEvent", event.id);
         }
-        container.appendChild(card);
-      });
+
+        window.location.href = "select-location.html";
+      };
     }
 
-    renderEventCards("moviesList", movies, "Movie", "movies-all.html");
-    renderEventCards("liveEventsList", liveEvents, "Live Event", "live-events-all.html");
-    renderEventCards("sportsList", sportsEvents, "Sport", "sports-all.html");
-    renderEventCards("kidsList", kidsSessions, "Kids", "kids-all.html");
-  </script>
+    container.appendChild(card);
+  });
+}
+
+renderEventCards("moviesList", movies, "Movie", "movies-all.html");
+renderEventCards("liveEventsList", liveEvents, "Live Event", "live-events-all.html");
+renderEventCards("sportsList", sportsEvents, "Sport", "sports-all.html");
+renderEventCards("kidsList", kidsSessions, "Kids", "kids-all.html");
+</script>
   <nav id="btm-nav" role="navigation" aria-label="Main Navigation">
     <a href="#movies-section">Movies</a>
     <a href="#live-events-section">Live Events</a>

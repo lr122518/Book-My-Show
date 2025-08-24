@@ -120,7 +120,7 @@ function loadMovies() {
           alert('Please select a show time.');
           return;
         }
-        localStorage.setItem('movie', '${movie.name}');
+        localStorage.setItem('movie', '${movie.name}'.trim());
         localStorage.setItem('movieDate', selectedDate);
         localStorage.setItem('movieTime', selectedTime);
         window.location.href='theaters.html';
@@ -133,7 +133,9 @@ function loadMovies() {
 
 // Load theaters for selected movie with posters
 function loadTheaters() {
-  const movie = getStored("movie");
+  const movie = getStored("movie").trim();
+  console.log("Retrieved movie:", getStored("movie"));
+  console.log("Setting movie:", movie.name);
   const list = document.getElementById("theaterList");
   if (!theaterData[movie]) {
     list.innerHTML = "<p>No theaters found for this movie.</p>";
