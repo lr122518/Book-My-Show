@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>All Live Events</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background:linear-gradient(white 30%,rgb(159, 8, 197));
+      margin: 0;
+       padding: 0 0 40px;
+       padding-bottom: 150px;
+    }
+    header {
+      background: #e50914;
+      color: white;
+      padding: 15px 12px;
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .language-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .language-tab {
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 8px 18px;
+      border-radius: 25px;
+      background-color: #eee;
+      color: #444;
+      user-select: none;
+      transition: background-color 0.25s, color 0.25s;
+    }
+    .language-tab.active {
+      background-color: #e50914;
+      color: white;
+    }
+    .event-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 22px;
+      max-width: 960px;
+      margin: 0 auto 40px;
+    }
+    .event-card {
+      width: 170px;
+      background-color: white;
+      border-radius: 13px;
+      box-shadow: 0 5px 18px rgba(229, 9, 20, 0.1);
+      cursor: pointer;
+      text-align: center;
+      user-select: none;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .event-card:hover {
+      transform: translateY(-7px) scale(1.04);
+      box-shadow: 0 12px 30px rgba(229, 9, 20, 0.25);
+      background: #fff0f7;
+    }
+    .event-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 13px 13px 0 0;
+      flex-shrink: 0;
+    }
+    .event-card p {
+      margin: 16px 12px 18px 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #322;
+      flex: 1 0 auto;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+<header>All Live Events</header>
+
+<div class="language-tabs">
+  <div class="language-tab active" data-lang="telugu">Telugu</div>
+  <div class="language-tab" data-lang="hindi">Hindi</div>
+  <div class="language-tab" data-lang="english">English</div>
+</div>
+
+<div id="teluguList" class="event-list"></div>
+<div id="hindiList" class="event-list hidden"></div>
+<div id="englishList" class="event-list hidden"></div>
+
+<script>
+  const liveEventsByLanguage = {
+    telugu: [
+      { id: 'Concert', title: 'Telugu Concert', img: 'images/concert.jpeg' },
+      { id: 'Telugu Drama Night', title: 'Telugu Drama Night', img: 'images/telugu_drama.jpeg' },
+      { id: 'Telugu Music Fest', title: 'Telugu Music Fest', img: 'images/telugu_music.jpeg' },
+      { id: 'Telugu Stand-up', title: 'Telugu Stand-up', img: 'images/telugu_standup.jpeg' },
+      { id: 'Telugu Opera', title: 'Telugu Opera', img: 'images/telugu_opera.jpg' },
+      { id: 'Telugu Dance Show', title: 'Telugu Dance Show', img: 'images/telugu_dance.jpg' }
+    ],
+    hindi: [
+      { id: 'Drama Show', title: 'Drama Show', img: 'images/drama_show.jpeg' },
+      { id: 'Jazz Festival', title: 'Jazz Festival', img: 'images/jazz.jpeg' },
+      { id: 'Theater Play', title: 'Theater Play', img: 'images/theater.jpeg' },
+      { id: 'Standup Comedy', title: 'Standup Comedy', img: 'images/standup.jpeg' },
+      { id: 'Puppet Show', title: 'Puppet Show', img: 'images/puppetshow.jpeg' },
+      { id: 'Marathon', title: 'Marathon', img: 'images/marathon.jpeg' }
+    ],
+    english: [
+      { id: 'Stand-up Night', title: 'Stand-up Night', img: 'images/Stand-up Night.jpeg' },
+      { id: 'Dance Night', title: 'Dance Night', img: 'images/dance.jpeg' },
+      { id: 'Rock Concert', title: 'Rock Concert', img: 'images/rock.jpeg' },
+      { id: 'Cultural Fest', title: 'Cultural Fest', img: 'images/culture.jpeg' },
+      { id: 'Festival', title: 'Festival', img: 'images/festival.jpeg' },
+      { id: 'Art Expo', title: 'Art Expo', img: 'images/artexpo.jpeg' }
+    ],
+  };
+
+  function createCard(event, lang) {
+    const card = document.createElement('div');
+    card.className = 'event-card';
+    card.innerHTML = `<img src="${event.img}" alt="${event.title}"><p>${event.title}</p>`;
+
+    card.onclick = () => {
+      localStorage.setItem('selectedEventId', event.id);
+      localStorage.setItem('selectedEventTitle', event.title);
+      localStorage.setItem('selectedCategory', 'Live Event');
+      localStorage.setItem('selectedLanguage', lang);
+      window.location.href = 'select-location.html';
+    };
+    return card;
+  }
+
+  function renderEvents(lang) {
+    const container = document.getElementById(lang + 'List');
+    container.innerHTML = '';
+    liveEventsByLanguage[lang].forEach(event => {
+      container.appendChild(createCard(event, lang));
+    });
+  }
+
+  Object.keys(liveEventsByLanguage).forEach(lang => renderEvents(lang));
+
+  const tabs = document.querySelectorAll('.language-tab');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      Object.keys(liveEventsByLanguage).forEach(lang => {
+        document.getElementById(lang + 'List').classList.add('hidden');
+      });
+
+      tab.classList.add('active');
+      const lang = tab.getAttribute('data-lang');
+      document.getElementById(lang + 'List').classList.remove('hidden');
+    });
+  });
+</script>
+</body>
+</html>

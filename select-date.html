@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Select Date & Time</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Keep your existing styles or use below */
+    body {
+      font-family: Arial, sans-serif;
+      background:linear-gradient(rgb(11, 176, 201) 25%,rgb(216, 14, 199));
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      user-select: none;
+    }
+    .container {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      width: 360px;
+      text-align: center;
+    }
+    h2 {
+      color: #d4145a;
+      margin-bottom: 24px;
+      font-weight: 700;
+      font-size: 1.6rem;
+    }
+    select {
+      width: 100%;
+      font-size: 1.1rem;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 24px;
+      outline-offset: 2px;
+      cursor: pointer;
+    }
+    button {
+      background-color: #e50914;
+      color: white;
+      padding: 14px 28px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #ab0723;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Select Date & Time</h2>
+    <select id="dateSelect">
+      <!-- Options added dynamically -->
+    </select>
+    <select id="timeSelect">
+      <option value="">-- Select Show Time --</option>
+      <option>10:00 AM</option>
+      <option>01:15 PM</option>
+      <option>04:30 PM</option>
+      <option>08:00 PM</option>
+    </select>
+    <button onclick="goNext()">Continue</button>
+  </div>
+
+  <script>
+    const dateSelect = document.getElementById('dateSelect');
+    const today = new Date();
+
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(today);
+      d.setDate(d.getDate() + i);
+      const dateStr = d.toLocaleDateString(undefined, {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
+      const option = document.createElement('option');
+      option.value = dateStr;
+      option.textContent = dateStr;
+      dateSelect.appendChild(option);
+    }
+
+    function goNext() {
+      const selectedDate = dateSelect.value;
+      const selectedTime = document.getElementById('timeSelect').value;
+      if (!selectedDate || !selectedTime) {
+        alert('Please select both date and time.');
+        return;
+      }
+
+      localStorage.setItem('movieDate', selectedDate);
+      localStorage.setItem('movieTime', selectedTime);
+
+      const category = localStorage.getItem('selectedCategory');
+      if (category === 'Sport') {
+        window.location.href = 'select-stadium.html';
+      } else {
+        window.location.href = 'theaters.html';
+      }
+    }
+  </script>
+</body>
+</html>

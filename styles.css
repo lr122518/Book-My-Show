@@ -1,0 +1,292 @@
+/* General Layout */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: linear-gradient(125deg, #f4f4f4 55%, #4102d2 100%);
+    margin: 0;
+    padding: 0 10px 30px;
+    line-height: 1.6;
+    color: #333;
+}
+/* Headers */
+header {
+    background-color: #e50914;
+    color: white;
+    padding: 15px 0;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 10;
+}
+
+h1, h2, h3 {
+    color: #e50914;
+    margin-top: 20px;
+}
+
+/* Buttons */
+button {
+    padding: 10px 15px;
+    margin: 10px 5px;
+    background-image: linear-gradient(90deg, #e50914 60%, #0c62fe 140%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(229, 9, 20, 0.18);
+    transition: background 0.19s, box-shadow 0.12s, transform 0.17s;
+    user-select: none;
+}
+
+button:hover {
+    background-image: linear-gradient(90deg, #ff80ab 20%, #651fff 84%);
+    box-shadow: 0 6px 28px #e040fb66, 0 1px 4px #0097a7bb;
+    transform: translateY(-2.5px) scale(1.04);
+}
+
+/* Select Dropdown */
+select {
+    padding: 8px 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin: 10px 0 15px;
+}
+
+/* Movie/Theater/Event Cards */
+.movie-list, .theater-list, .event-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.movie-card, .theater-card, .event-card {
+    background: linear-gradient(135deg, #ffe5ec 0%, #e0f7fa 100%);
+    border-radius: 14px;
+    box-shadow: 0 4px 18px 0 rgba(183, 28, 28, 0.15), 0 1.5px 6px 0 rgba(0,0,0,0.10);
+    padding: 16px;
+    width: 178px;
+    text-align: center;
+    transition: transform .19s cubic-bezier(.4,2,.3,1), box-shadow .18s;
+    position: relative;
+}
+
+.movie-card:hover, .event-card:hover, .theater-card:hover {
+    transform: translateY(-8px) scale(1.04);
+    box-shadow: 0 12px 36px rgba(255,99,71,0.25), 0 4px 10px #00838f29;
+    background: linear-gradient(135deg, #ffccbc 0%, #d1c4e9 100%);
+    z-index: 1;
+}
+
+/* Pictures in the cards */
+.movie-card img,
+.event-card img,
+.theater-card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 3.5px solid #ff80ab;
+    transition: border-color 0.3s, box-shadow 0.3s, filter 0.23s;
+    box-shadow: 0 2px 12px rgba(0,151,167,0.20);
+}
+
+/* HOVER: Add a glow and color border on image hover */
+.movie-card:hover img,
+.event-card:hover img,
+.theater-card:hover img {
+    border-color: #651fff;
+    filter: brightness(1.13) saturate(1.2) drop-shadow(0 0 16px #ff1744cc);
+    box-shadow: 0 4px 18px #00e5ff88;
+    cursor: pointer;
+}
+
+.theater-card:hover {
+    background: linear-gradient(135deg, #ffe082 0%, #b2ff59 100%);
+}
+
+.movie-card p, .event-card p, .theater-card p {
+    margin: 10px 0 5px;
+    font-weight: bold;
+    color: #333;
+    letter-spacing: 0.5px;
+}
+
+/* Seat Map */
+.seat-map {
+    display: grid;
+    grid-template-columns: repeat(8, 40px);
+    gap: 8px;
+    justify-content: center;
+    margin: 20px auto;
+    /* Add background to seat map for contrast on poster */
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 15px 12px;
+    border-radius: 12px;
+    max-width: 370px;
+}
+
+.seat {
+    width: 40px;
+    height: 40px;
+    background-color: gray;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    user-select: none;
+}
+
+.seat.selected {
+    background-color: green;
+}
+
+.seat.booked {
+    background-color: red;
+    cursor: not-allowed;
+}
+
+/* Seat Legend */
+.legend {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 15px 0;
+    font-size: 14px;
+}
+
+.legend div {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legend .seat {
+    width: 20px;
+    height: 20px;
+}
+
+/* Booking Input */
+#userName {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #111;
+    padding: 8px;
+    font-size: 16px;
+    width: 220px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin: 10px 0 20px;
+}
+
+/* Label styling */
+label {
+    font-weight: bold;
+    color: #e50914;
+    display: block;
+    margin-bottom: 6px;
+    user-select: none;
+}
+
+/* Seat selection summary */
+#selectedSeatsDisplay {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    display: inline-block;
+    min-width: 100px;
+    font-weight: bold;
+    user-select: none;
+}
+
+/* Booking info container (inside header on booking.html) */
+#bookingInfo {
+    background: rgba(0,0,0,0.6);
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    margin: 12px auto 20px auto;
+    max-width: 320px;
+    font-size: 18px;
+    user-select: none;
+    z-index: 12;
+    position: relative;
+}
+
+/* Receipt Styling */
+.receipt {
+    background-color: #fff;
+    padding: 25px 30px;
+    max-width: 500px;
+    margin: 40px auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+    text-align: left;
+    line-height: 1.5;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.receipt h2 {
+    color: #e50914;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.receipt p {
+    font-size: 18px;
+    margin: 12px 0;
+    font-weight: 500;
+}
+
+/* Showtimes badges */
+.showtime {
+    display: inline-block;
+    margin: 4px 8px 4px 0;
+    background: #e50914;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 14px;
+    user-select: none;
+}
+
+/* Date selector for movies */
+.date-select {
+    margin: 6px 0 10px;
+    padding: 6px 12px;
+    font-size: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .seat-map {
+        grid-template-columns: repeat(4, 40px);
+        max-width: 200px;
+        padding: 12px 10px;
+    }
+
+    .movie-list, .theater-list, .event-list, .event-card {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .movie-card, .theater-card, .event-card {
+        width: 90%;
+    }
+
+    #bookingInfo {
+        max-width: 90%;
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    #userName {
+        width: 90%;
+        font-size: 14px;
+    }
+}

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Select Stadium</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+      user-select: none;
+      background:white;
+      color: #333;
+    }
+    h1 {
+      color: #e50914;
+      margin-bottom: 16px;
+    }
+    select {
+      width: 260px;
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin: 20px 0;
+      cursor: pointer;
+    }
+    button {
+      background-color: #e50914;
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.25s ease;
+    }
+    button:hover {
+      background-color: #b00610;
+    }
+  </style>
+</head>
+<body>
+  <h1>Select Stadium</h1>
+  <select id="stadiumSelect" aria-label="Select Stadium">
+    <option value="">-- Select a Stadium --</option>
+    <option value="National Stadium">National Stadium</option>
+    <option value="City Sports Arena">City Sports Arena</option>
+    <option value="Riverfront Stadium">Riverfront Stadium</option>
+    <option value="Green Field Stadium">Green Field Stadium</option>
+  </select>
+  <br />
+  <button id="continueBtn">Continue to Seats</button>
+
+  <script>
+    const stadiumSelect = document.getElementById('stadiumSelect');
+    const continueBtn = document.getElementById('continueBtn');
+
+    // On page load, pre-select previously chosen stadium, if any
+    window.onload = () => {
+      const savedStadium = localStorage.getItem('selectedStadium');
+      if (savedStadium) {
+        stadiumSelect.value = savedStadium;
+      }
+    };
+
+    continueBtn.addEventListener('click', () => {
+      const selectedStadium = stadiumSelect.value;
+      if (!selectedStadium) {
+        alert('Please select a stadium.');
+        stadiumSelect.focus();
+        return;
+      }
+      // Set event category for seat booking page logic
+      localStorage.setItem('selectedCategory', 'Sport');
+
+      // Save the chosen stadium name
+      localStorage.setItem('selectedStadium', selectedStadium);
+
+      // Redirect to the unified seat booking page
+      window.location.href = 'select-seats.html';
+    });
+  </script>
+</body>
+</html>

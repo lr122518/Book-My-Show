@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Payment</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Payment page specific styles */
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #fceabb, #f8b500);
+      color: #333;
+      padding: 20px;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .payment-container {
+      background: white;
+      max-width: 400px;
+      width: 100%;
+      margin: auto;
+      padding: 25px 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      user-select: none;
+    }
+
+    h2 {
+      color: #e50914;
+      margin-bottom: 25px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+    }
+
+    p {
+      font-size: 18px;
+      margin: 12px 0;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 6px;
+      font-weight: 600;
+      color: #e50914;
+      text-align: left;
+    }
+
+    select, input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 18px;
+      background-color: #e50914;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #b00610;
+    }
+  </style>
+</head>
+<body>
+  <div class="payment-container">
+    <h2>Payment</h2>
+    <div id="paymentDetails"></div>
+
+    <label for="paymentMethod">Select Payment Method:</label>
+    <select id="paymentMethod" required>
+      <option value="">-- Choose a method --</option>
+      <option value="Credit Card">Credit Card</option>
+      <option value="Debit Card">Debit Card</option>
+      <option value="UPI">UPI</option>
+      <option value="Wallet">Wallet</option>
+    </select>
+
+    <label for="paymentInfo">Enter Payment Info:</label>
+    <input type="text" id="paymentInfo" placeholder="e.g., Card number or UPI ID" required />
+
+    <button id="payBtn">Pay Now</button>
+  </div>
+
+  <script>
+    // Read booking details from localStorage
+    const category = localStorage.getItem('selectedCategory') || 'N/A';
+
+    // Determine event and venue based on category
+    let eventName = 'N/A';
+    let venueName = 'N/A';
+
+    if (category === 'Sport') {
+      eventName = localStorage.getItem('selectedEventTitle') || 'N/A';
+      venueName = localStorage.getItem('selectedStadium') || 'N/A';
+    } else {
+      eventName = localStorage.getItem('movie') || localStorage.getItem('selectedEventTitle') || 'N/A';
+      venueName = localStorage.getItem('theater') || localStorage.getItem('selectedVenue') || 'N/A';
+    }
+
+    const date = localStorage.getItem('movieDate') || 'N/A';
+    const time = localStorage.getItem('movieTime') || 'N/A';
+    const seats = localStorage.getItem('seats') || '';
+    const seatCount = seats ? seats.split(',').length : 0;
+
+    // Define the ticket price (₹150 per seat as per your current setup)
+    const ticketPrice = 150;
+    const totalAmount = ticketPrice * seatCount;
+
+    // Display payment details summary
+    const paymentDetailsDiv = document.getElementById('paymentDetails');
+    paymentDetailsDiv.innerHTML = `
+      <p><strong>Event:</strong> ${eventName}</p>
+      <p><strong>Venue:</strong> ${venueName}</p>
+      <p><strong>Date:</strong> ${date}</p>
+      <p><strong>Show Time:</strong> ${time}</p>
+      <p><strong>Seats Booked:</strong> ${seats}</p>
+      <p><strong>Price per Seat:</strong> ₹${ticketPrice}</p>
+      <h3>Total Amount: ₹${totalAmount}</h3>
+    `;
+
+    // Handle payment button click
+    document.getElementById('payBtn').addEventListener('click', () => {
+      const method = document.getElementById('paymentMethod').value;
+      const info = document.getElementById('paymentInfo').value.trim();
+
+      if (!method) {
+        alert('Please select a payment method.');
+        return;
+      }
+      if (!info) {
+        alert('Please enter payment information.');
+        return;
+      }
+
+      // Simulate successful payment
+      alert(`Payment of ₹${totalAmount} via ${method} was successful!`);
+
+      // Store payment info in localStorage for receipt
+      localStorage.setItem('paymentMethod', method);
+      localStorage.setItem('amountPaid', totalAmount);
+
+      // Save the full booking for history
+      saveBooking();
+
+      // Redirect to receipt page
+      window.location.href = 'receipt.html';
+    });
+
+    // Save booking details cumulatively
+    function saveBooking() {
+      const booking = {
+        user: localStorage.getItem('user') || 'Guest',
+        location: localStorage.getItem('location') || 'N/A',
+        event: eventName,
+        venue: venueName,
+        date: date,
+        time: time,
+        seats: seats,
+        paymentMethod: localStorage.getItem('paymentMethod') || 'N/A',
+        amountPaid: localStorage.getItem('amountPaid') || 0,
+        bookingTime: new Date().toISOString(),
+      };
+
+      let bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+      bookings.push(booking);
+      localStorage.setItem('bookings', JSON.stringify(bookings));
+
+      // Store keys for receipt page to read
+      localStorage.setItem('event', eventName);
+      localStorage.setItem('venue', venueName);
+      localStorage.setItem('bookingDate', date);
+      localStorage.setItem('bookingTime', time);
+    }
+  </script>
+</body>
+</html>

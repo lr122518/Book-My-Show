@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>All Movies</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background:linear-gradient(white 30%,rgb(17, 161, 213));
+      margin: 0;
+      padding: 0 0 40px;
+      padding-bottom: 60px;
+      /* width: 100%; */
+    }
+    header {
+      background: #e50914;
+      color: rgb(122, 198, 233);
+      padding: 15px 12px;
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .language-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .language-tab {
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 8px 18px;
+      border-radius: 25px;
+      background-color: #eee;
+      color: #444;
+      user-select: none;
+      transition: background-color 0.25s, color 0.25s;
+    }
+    .language-tab.active {
+      background-color: #e50914;
+      color: white;
+    }
+    .event-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 22px;
+      max-width: 960px;
+      margin: 0 auto 40px;
+    }
+    .event-card {
+      width: 170px;
+      background-color: white;
+      border-radius: 13px;
+      box-shadow: 0 5px 18px rgba(229, 9, 20, 0.1);
+      cursor: pointer;
+      text-align: center;
+      user-select: none;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .event-card:hover {
+      transform: translateY(-7px) scale(1.04);
+      box-shadow: 0 12px 30px rgba(229, 9, 20, 0.25);
+      background: #fff0f7;
+    }
+    .event-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 13px 13px 0 0;
+      flex-shrink: 0;
+    }
+    .event-card p {
+      margin: 16px 12px 18px 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #322;
+      flex: 1 0 auto;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <header>All Movies</header>
+
+  <div class="language-tabs">
+    <div class="language-tab active" data-lang="telugu">Telugu</div>
+    <div class="language-tab" data-lang="hindi">Hindi</div>
+    <div class="language-tab" data-lang="english">English</div>
+  </div>
+
+  <div id="teluguList" class="event-list"></div>
+  <div id="hindiList" class="event-list hidden"></div>
+  <div id="englishList" class="event-list hidden"></div>
+
+  <script>
+    const moviesByLanguage = {
+      telugu: [
+        { id: 'RRR', title: 'RRR', img: 'images/rrr.jpeg' },
+        { id: 'Pushpa', title: 'Pushpa', img: 'images/pushpa.jpeg' },
+        { id: 'Jailer', title: 'Jailer', img: 'images/jailer.jpg' },
+        { id: 'Leo', title: 'Leo', img: 'images/leo.jpg' },
+        { id: 'Ala Vaikunthapurramuloo', title: 'Ala Vaikunthapurramuloo', img: 'images/ala_vaikunthapurramuloo.jpg' },
+        { id: 'Sarileru Neekevvaru', title: 'Sarileru Neekevvaru', img: 'images/sarileru_neekevvaru.jpeg' }
+      ],
+      hindi: [
+        { id: 'KGF', title: 'KGF', img: 'images/kgf.jpeg' },
+        { id: 'Avengers', title: 'Avengers', img: 'images/avengers.jpg' },
+        { id: 'Spider-Man', title: 'Spider-Man', img: 'images/spiderman.jpeg' },
+        { id: 'Black Panther', title: 'Black Panther', img: 'images/blackpanther.jpeg' },
+        { id: 'Dangal', title: 'Dangal', img: 'images/dangal.jpg' },
+        { id: 'Bahubali', title: 'Bahubali', img: 'images/bahubali.jpg' }
+      ],
+      english: [
+        { id: 'Inception', title: 'Inception', img: 'images/inception.jpg' },
+        { id: 'Avatar', title: 'Avatar', img: 'images/avatar.jpeg' },
+        { id: 'The Batman', title: 'The Batman', img: 'images/batman.jpeg' },
+        { id: 'Tenet', title: 'Tenet', img: 'images/tenet.jpeg' },
+        { id: 'The Matrix', title: 'The Matrix', img: 'images/matrix.jpeg' },
+        { id: 'Joker', title: 'Joker', img: 'images/joker.jpg' }
+      ],
+    };
+
+    function createCard(movie, lang) {
+      const card = document.createElement('div');
+      card.className = 'event-card';
+      card.innerHTML = `<img src="${movie.img}" alt="${movie.title}"><p>${movie.title}</p>`;
+
+      card.onclick = () => {
+        localStorage.setItem("movie", movie.id);
+        localStorage.setItem('selectedEventId', movie.id);
+        localStorage.setItem('selectedEventTitle', movie.title);
+        localStorage.setItem('selectedCategory', 'Movie');
+        localStorage.setItem('selectedLanguage', lang);
+        window.location.href = 'select-location.html';
+      };
+      return card;
+    }
+
+    function renderMovies(lang) {
+      const container = document.getElementById(lang + 'List');
+      container.innerHTML = '';
+      moviesByLanguage[lang].forEach(movie => {
+        container.appendChild(createCard(movie, lang));
+      });
+    }
+
+    // Initial render for all languages
+    Object.keys(moviesByLanguage).forEach(lang => renderMovies(lang));
+
+    // Tab switching functionality
+    const tabs = document.querySelectorAll('.language-tab');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        Object.keys(moviesByLanguage).forEach(lang => {
+          document.getElementById(lang + 'List').classList.add('hidden');
+        });
+        tab.classList.add('active');
+        const lang = tab.getAttribute('data-lang');
+        document.getElementById(lang + 'List').classList.remove('hidden');
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Select Location</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background:linear-gradient(rgb(235, 11, 190) 25%,rgb(11, 198, 219));
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      user-select: none;
+    }
+    .container {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      width: 320px;
+      text-align: center;
+    }
+    h2 {
+      color: #d4145a;
+      margin-bottom: 24px;
+      font-weight: 700;
+      font-size: 1.6rem;
+    }
+    select {
+      width: 100%;
+      font-size: 1.1rem;
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 28px;
+      outline-offset: 2px;
+      cursor: pointer;
+    }
+    button {
+      background-color: #e50914;
+      color: white;
+      padding: 14px 28px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #ab0723;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Select Location</h2>
+    <select id="locationSelect">
+      <option value="">-- Select Location --</option>
+      <option>Hyderabad</option>
+      <option>Bangalore</option>
+      <option>Chennai</option>
+      <option>Delhi</option>
+      <option>Mumbai</option>
+      <option>Kolkata</option>
+    </select>
+    <button onclick="proceed()">Continue</button>
+  </div>
+
+  <script>
+    function proceed() {
+      const location = document.getElementById('locationSelect').value;
+      if (!location) {
+        alert('Please select a location.');
+        return;
+      }
+      localStorage.setItem('location', location);
+      window.location.href = 'select-date.html';
+    }
+  </script>
+</body>
+</html>

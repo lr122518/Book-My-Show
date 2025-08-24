@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Movie & Event Booking - Home</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to top, #eb5c6a, #9d2ed8 20%, #108ef6,#cfe315);
+  margin: 0;
+  padding: 160px 0 80px 0; /* 160px to compensate header+nav */
+  scroll-behavior: smooth;
+}
+    #site-header {
+  background-color: #e50914;
+  padding: 20px 0;
+  text-align: center;
+  color: white;
+  font-weight: 900;
+  font-size: 2.5rem;
+  letter-spacing: 0.15em;
+  user-select: none;
+  margin-bottom: 0%;
+  width: 100%;
+  position: fixed;  /* Make header fixed */
+  top: 0;
+  left: 0;
+  z-index: 1000; /* Higher than nav */
+}
+
+#top-nav {
+  display: flex;
+  justify-content: center;
+  background: #fafafa;
+  padding: 12px 0;
+  gap: 60px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  user-select: none;
+  position: fixed;  /* Make nav fixed */
+  top: 100px;  /* Push below the header (header height approx 80px) */
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+}
+
+    #top-nav a {
+      text-decoration: none;
+      color: #d4145a;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    #top-nav a:hover,
+    #top-nav a:focus {
+  color: #161515;
+  outline: none;
+  transform: scale(1.1);
+  transition: transform 0.3s ease, color 0.3s ease;
+  }
+    #btm-nav {
+      margin-top: 80px;
+      margin-bottom: -80px;
+      display: flex;
+      justify-content: center;
+      background: #141414;
+      padding: 12px 0;
+      gap: 60px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      user-select: none;
+      position: sticky;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+    }
+    #btm-nav a {
+      text-decoration: none;
+      color: white;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    #btm-nav a:hover,
+    #btm-nav a:focus {
+      color: #e50914;
+      outline: none;
+      font-size: 1.2rem;
+    }
+    h2 {
+      margin-top: 40px;
+      margin-left: 6%;
+      color: #d4145a;
+      font-weight: 600;
+      font-size: 1.4rem;
+      letter-spacing: 0.06em;
+      user-select: none;
+    }
+    .event-list {
+      display: flex;
+      flex-wrap: nowrap;
+      /* overflow-x: auto; */
+      padding-left: 6%;
+      gap: 24px;
+      margin: 22px 0 0 0;
+      scrollbar-width: thin;
+      scrollbar-color: #716f6f #f1f1f1;
+    }
+    .event-list::-webkit-scrollbar {
+      height: 8px;
+    }
+    .event-list::-webkit-scrollbar-thumb {
+      background-color: #6e6969;
+      border-radius: 4px;
+    }
+    .event-list::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    .event-card {
+      flex: 0 0 auto;
+      width: 170px;
+      background: white;
+      border-radius: 13px;
+      box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+      cursor: pointer;
+      text-align: center;
+      user-select: none;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .event-card:hover {
+      transform: translateY(-7px) scale(1.04);
+      box-shadow: 0 12px 30px rgba(229, 9, 20, 0.25);
+      background: #fff0f7;
+    }
+    .event-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 13px 13px 0 0;
+      user-select: none;
+      flex-shrink: 0;
+    }
+    .event-card p {
+      margin: 16px 12px 18px 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      line-height: 1.3;
+      color: #2d2d2d;
+      flex: 1 0 auto;
+    }
+    .see-all-visibility{
+      /* display: none; */ 
+      /* visibility: hidden; */
+       /* flex: 0 0 auto; */
+       align-content: center;
+       margin-top: 70px;
+       height: 50px;
+      width: 170px;
+      background:red;
+      border-radius: 13px;
+      box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+      cursor: pointer;
+      text-align: center;
+      user-select: none;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      /* display: flex; */
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .see-all-visibility:hover {
+      transform: translateY(-8px) scale(1.04);
+      box-shadow: 0 12px 25px rgba(229,9,20,0.2);
+      background: #fff0f7;
+    }
+    .see-all-visibility img {
+      /* visibility: hidden; */
+      display: none;
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 13px 13px 0 0;
+      user-select: none;
+      flex-shrink: 0;
+    }
+    .see-all-visibility p {
+      margin: 16px 12px 18px 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      line-height: 1.3;
+      color: #2d2d2d;
+      flex: 1 0 auto;
+    }
+  </style>
+</head>
+<body>
+
+  <header id="site-header">BOOK MY SHOW</header>
+
+  <nav id="top-nav" role="navigation" aria-label="Main Navigation">
+    <a href="#movies-section">Movies</a>
+    <a href="#live-events-section">Live Events</a>
+    <a href="#sports-section">Sports</a>
+    <a href="#kids-section">Kids</a>
+  </nav>
+
+  <section id="movies-section">
+    <h2>Movies</h2>
+    <div class="event-list" id="moviesList"></div>
+  </section>
+
+  <section id="live-events-section">
+    <h2>Live Events</h2>
+    <div class="event-list" id="liveEventsList"></div>
+  </section>
+
+  <section id="sports-section">
+    <h2>Sports</h2>
+    <div class="event-list" id="sportsList"></div>
+  </section>
+
+  <section id="kids-section">
+    <h2>Kids</h2>
+    <div class="event-list" id="kidsList"></div>
+  </section>
+
+  <script>
+    const movies = [
+      { id: "RRR", title: "RRR", img: "images/rrr.jpeg" },
+      { id: "KGF", title: "KGF", img: "images/kgf.jpeg" },
+      { id: "Pushpa", title: "Pushpa", img: "images/pushpa.jpeg" },
+      { id: "Inception", title: "Inception", img: "images/inception.jpg" },
+      { id: "Avatar", title: "Avatar", img: "images/avatar.jpeg" },
+      { id: "see-all-movies", title: "See All", img: "images/see_all.jpeg" }
+    ];
+
+    const liveEvents = [
+      { id: "Hyderabad Concert", title: "Concert", img: "images/concert.jpeg" },
+      { id: "Bangalore Drama Show", title: "Drama Show", img: "images/drama_show.jpeg" },
+      { id: "Chennai Stand-up Night", title: " Stand-up Night", img: "images/Stand-up Night.jpeg" },
+      { id: "Mumbai Jazz Festival", title: " Jazz Festival", img: "images/jazz.jpeg" },
+      { id: "Delhi Theater Play", title: " Theater Play", img: "images/theater.jpeg" },
+      { id: "see-all-live-events", title: "See All", img: "images/see_all.jpeg" }
+    ];
+
+    const sportsEvents = [
+      { id: "Football", title: "Football", img: "images/football.jpeg" },
+      { id: "Cricket", title: "Cricket", img: "images/cricket.jpeg" },
+      { id: "Kabaddi", title: "Kabaddi", img: "images/kabaddi.jpg" },
+      { id: "Hockey", title: "Hockey", img: "images/hockey.jpeg" },
+      { id: "Volleyball", title: "Volleyball", img: "images/valleyball.jpeg" },
+      { id: "see-all-sports", title: "See All", img: "images/see_all.jpeg" }
+    ];
+
+    const kidsSessions = [
+      { id: "Toddler Playtime", title: "Toddler Playtime", img: "images/toddler_playtime.jpeg" },
+      { id: "Creative Arts", title: "Creative Arts", img: "images/creative_arts.jpeg" },
+      { id: "Storytelling Hour", title: "Storytelling Hour", img: "images/storytelling_hour.jpeg" },
+      { id: "Music & Dance", title: "Music & Dance", img: "images/music_dance.jpeg" },
+      { id: "Outdoor Games", title: "Outdoor Games", img: "images/outdoor_games.jpeg" },
+      { id: "see-all-kids", title: "See All", img: "images/see_all.jpeg" }
+    ];
+
+    function renderEventCards(containerId, events, category, seeAllRedirect) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = "";
+      events.forEach(event => {
+        const card = document.createElement("div");
+        card.className = "event-card";
+        card.innerHTML = `<img src="${event.img}" alt="${event.title}"><p>${event.title}</p>`;
+        if(event.id.startsWith("see-all")) {
+          card.onclick = () => window.location.href = seeAllRedirect;
+          card.className ="see-all-visibility";
+        } else {
+          card.onclick = () => {
+            localStorage.setItem("selectedEventId", event.id);
+            localStorage.setItem("selectedEventTitle", event.title);
+            localStorage.setItem("selectedCategory", category);
+            window.location.href = "select-location.html";
+          };
+        }
+        container.appendChild(card);
+      });
+    }
+
+    renderEventCards("moviesList", movies, "Movie", "movies-all.html");
+    renderEventCards("liveEventsList", liveEvents, "Live Event", "live-events-all.html");
+    renderEventCards("sportsList", sportsEvents, "Sport", "sports-all.html");
+    renderEventCards("kidsList", kidsSessions, "Kids", "kids-all.html");
+  </script>
+  <nav id="btm-nav" role="navigation" aria-label="Main Navigation">
+    <a href="#movies-section">Movies</a>
+    <a href="#live-events-section">Live Events</a>
+    <a href="#sports-section">Sports</a>
+    <a href="#kids-section">Kids</a>
+  </nav>
+
+</body>
+</html>

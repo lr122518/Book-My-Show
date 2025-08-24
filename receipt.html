@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Booking Receipt</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Your existing receipt styles */
+    body{
+      background: rgb(70, 140, 219);
+    }
+  </style>
+</head>
+<body>
+  <div class="receipt">
+    <h2>Booking Receipt</h2>
+    <p><strong>Name</strong><span id="rName"></span></p>
+    <p><strong>Location</strong><span id="rLocation"></span></p>
+    <p><strong>Event</strong><span id="rEvent"></span></p>
+    <p><strong>Venue</strong><span id="rVenue"></span></p>
+    <p><strong>Show Date</strong><span id="rDate"></span></p>
+    <p><strong>Show Time</strong><span id="rTime"></span></p>
+    <p><strong>Seats</strong><span id="rSeats"></span></p>
+    <p><strong>Payment Method</strong><span id="rPaymentMethod"></span></p>
+    <p><strong>Amount Paid</strong>₹<span id="rAmountPaid"></span></p>
+  </div>
+
+  <script>
+    document.getElementById("rName").textContent = localStorage.getItem("user") || "N/A";
+    document.getElementById("rLocation").textContent = localStorage.getItem("location") || "N/A";
+    document.getElementById("rEvent").textContent = localStorage.getItem("event") || "N/A";
+    document.getElementById("rVenue").textContent = localStorage.getItem("venue") || "N/A";
+    document.getElementById("rDate").textContent = localStorage.getItem("bookingDate") || "N/A";
+    document.getElementById("rTime").textContent = localStorage.getItem("bookingTime") || "N/A";
+    document.getElementById("rSeats").textContent = localStorage.getItem("seats") || "N/A";
+    document.getElementById("rPaymentMethod").textContent = localStorage.getItem("paymentMethod") || "N/A";
+    document.getElementById("rAmountPaid").textContent = localStorage.getItem("amountPaid") || "0";
+  </script>
+</body>
+</html>

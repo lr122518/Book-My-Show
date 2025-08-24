@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Panel - Booking Details & Reset</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #fff;
+      color: #333;
+      max-width: 900px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #e50914;
+      margin-bottom: 25px;
+    }
+    h2, h3 {
+      border-bottom: 2px solid #e50914;
+      padding-bottom: 6px;
+      color: #d40812;
+      margin-top: 40px;
+      margin-bottom: 15px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #e50914;
+      color: white;
+      font-weight: bold;
+    }
+    tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+    .reset-btn {
+      background-color: #e50914;
+      border: none;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 13px;
+      user-select: none;
+      transition: background-color 0.3s ease;
+      margin-top: 4px;
+      float: right;
+    }
+    .reset-btn:hover {
+      background-color: #b00610;
+    }
+    .no-bookings {
+      text-align: center;
+      margin: 20px 0;
+      font-size: 16px;
+      color: #555;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      margin-top: 0px;
+    }
+    .section-header h3 {
+      margin: 0;
+      color: #d40812;
+    }
+  </style>
+</head>
+<body>
+  <h1>Admin Panel - Booking Details & Reset</h1>
+
+  <div id="bookingContainer"></div>
+
+  <script>
+    // Movies and their corresponding theaters
+    const theaterData = {
+      RRR: ["PVR Cinemas", "INOX", "Cinepolis"],
+      KGF: ["PVR Cinemas", "INOX"],
+      Pushpa: ["Cinepolis", "Carnival Cinemas"],
+      Inception: ["PVR Cinemas", "IMAX"],
+      Avatar: ["IMAX", "INOX"],
+      "The Batman": ["PVR Cinemas", "Cinepolis"],
+      Vikram: ["Carnival Cinemas", "Cinepolis"],
+      Jailer: ["PVR Cinemas", "INOX"],
+      Leo: ["IMAX", "Carnival Cinemas"]
+    };
+
+    // Sports stadiums
+    const stadiums = [
+      "National Stadium",
+      "City Sports Arena",
+      "Riverfront Stadium",
+      "Green Field Stadium"
+    ];
+
+    const bookingContainer = document.getElementById("bookingContainer");
+
+    function renderMovieTheaterBookings(bookings) {
+      let hasBookings = false;
+
+      [...document.querySelectorAll(".movie-theater-section")].forEach(e => e.remove());
+
+      for(const movie in theaterData) {
+        theaterData[movie].forEach(theater => {
+          const filtered = bookings.filter(b => b.movie === movie && b.theater === theater);
+          if(filtered.length === 0) return;
+          hasBookings = true;
+
+          const section = document.createElement("section");
+          section.className = "movie-theater-section";
+          section.style.marginBottom = "40px";
+
+          const headerDiv = document.createElement("div");
+          headerDiv.className = "section-header";
+
+          const heading = document.createElement("h3");
+          heading.textContent = `${movie} - ${theater}`;
+
+          const resetBtn = document.createElement("button");
+          resetBtn.textContent = "Reset Bookings";
+          resetBtn.className = "reset-btn";
+
+          resetBtn.addEventListener("click", () => {
+            if(confirm(`Are you sure to reset bookings for "${movie}" at "${theater}"? This cannot be undone.`)) {
+              localStorage.removeItem(`bookedSeats_${movie}_${theater}`);
+
+              let allBookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+              allBookings = allBookings.filter(b => !(b.movie === movie && b.theater === theater));
+              localStorage.setItem('bookings', JSON.stringify(allBookings));
+
+              alert('Bookings reset successfully!');
+              renderAllBookings();
+            }
+          });
+
+          headerDiv.appendChild(heading);
+          headerDiv.appendChild(resetBtn);
+          section.appendChild(headerDiv);
+
+          const table = document.createElement("table");
+          table.innerHTML = `
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Seats Booked</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Payment Method</th>
+                <th>Amount Paid (₹)</th>
+                <th>Booking Time</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          `;
+
+          const tbody = table.querySelector("tbody");
+
+          filtered.forEach(b => {
+            const seatCount = b.seats ? b.seats.split(",").length : 0;
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${b.user || "Guest"}</td>
+              <td>${seatCount} (${b.seats || "None"})</td>
+              <td>${b.movieDate || "N/A"}</td>
+              <td>${b.movieTime || "N/A"}</td>
+              <td>${b.paymentMethod || "N/A"}</td>
+              <td>${b.amountPaid || "0"}</td>
+              <td>${b.bookingTime ? new Date(b.bookingTime).toLocaleString() : "N/A"}</td>
+            `;
+            tbody.appendChild(row);
+          });
+
+          section.appendChild(table);
+          bookingContainer.appendChild(section);
+        });
+      }
+
+      if(!hasBookings) {
+        const noBookingsMsg = document.createElement('p');
+        noBookingsMsg.className = 'no-bookings';
+        noBookingsMsg.textContent = 'No movie/theater bookings found.';
+        bookingContainer.appendChild(noBookingsMsg);
+      }
+    }
+
+    function renderSportsBookings(bookings) {
+      [...document.querySelectorAll(".sports-section")].forEach(e => e.remove());
+
+      const container = document.createElement("div");
+      container.className = "sports-section";
+      container.style.marginTop = "50px";
+
+      const heading = document.createElement("h2");
+      heading.textContent = "Sports / Stadium Bookings";
+      heading.style.borderBottom = "2px solid #e50914";
+      heading.style.paddingBottom = "6px";
+      heading.style.color = "#d40812";
+      container.appendChild(heading);
+
+      let hasBookings = false;
+
+      stadiums.forEach(stadium => {
+        const filtered = bookings.filter(b => b.category === "Sport" && (b.venue === stadium || b.stadium === stadium));
+        if(filtered.length === 0) return;
+        hasBookings = true;
+
+        const section = document.createElement("section");
+        section.style.marginBottom = "40px";
+
+        const headerDiv = document.createElement("div");
+        headerDiv.className = "section-header";
+
+        const title = document.createElement("h3");
+        title.textContent = stadium;
+
+        const resetBtn = document.createElement("button");
+        resetBtn.textContent = "Reset Bookings";
+        resetBtn.className = "reset-btn";
+
+        resetBtn.addEventListener("click", () => {
+          if(confirm(`Are you sure to reset bookings for "${stadium}"? This cannot be undone.`)) {
+            localStorage.removeItem(`bookedSeats_Sport_${stadium}`);
+
+            let allBookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+            allBookings = allBookings.filter(b => !(b.category === "Sport" && (b.venue === stadium || b.stadium === stadium)));
+            localStorage.setItem('bookings', JSON.stringify(allBookings));
+
+            alert('Stadium bookings reset!');
+
+            renderAllBookings();
+          }
+        });
+
+        headerDiv.appendChild(title);
+        headerDiv.appendChild(resetBtn);
+        section.appendChild(headerDiv);
+
+        const table = document.createElement("table");
+        table.innerHTML = `
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Seats Booked</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Payment Method</th>
+              <th>Amount Paid (₹)</th>
+              <th>Booking Time</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        `;
+
+        const tbody = table.querySelector("tbody");
+
+        filtered.forEach(b => {
+          const seatCount = b.seats ? b.seats.split(",").length : 0;
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${b.user || "Guest"}</td>
+            <td>${seatCount} (${b.seats || "None"})</td>
+            <td>${b.movieDate || b.eventDate || "N/A"}</td>
+            <td>${b.movieTime || b.eventTime || "N/A"}</td>
+            <td>${b.paymentMethod || "N/A"}</td>
+            <td>${b.amountPaid || "0"}</td>
+            <td>${b.bookingTime ? new Date(b.bookingTime).toLocaleString() : "N/A"}</td>
+          `;
+          tbody.appendChild(row);
+        });
+
+        section.appendChild(table);
+        container.appendChild(section);
+      });
+
+      if(!hasBookings) {
+        const noBookingsMsg = document.createElement('p');
+        noBookingsMsg.className = 'no-bookings';
+        noBookingsMsg.textContent = 'No sports bookings found.';
+        container.appendChild(noBookingsMsg);
+      }
+
+      bookingContainer.appendChild(container);
+    }
+
+    function renderAllBookings() {
+      bookingContainer.innerHTML = '';
+
+      const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+
+      renderMovieTheaterBookings(bookings);
+      renderSportsBookings(bookings);
+    }
+
+    // Initial render on page load
+    renderAllBookings();
+
+  </script>
+</body>
+</html>

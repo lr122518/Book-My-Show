@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>All Sports</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background:linear-gradient(white 30%,rgb(12, 219, 164));
+      margin: 0;
+      padding: 0 0 40px;
+      user-select: none;
+      padding-top: 80px;
+    }
+    header {
+      background: #e50914;
+      color: white;
+      padding: 25px 12px;
+      font-size: 1.8rem;
+      font-weight: 700;
+      text-align: center;
+      position: fixed;
+      width: 100%;
+      z-index: 100;
+      top: 0;
+      border-bottom: 100px;
+    }
+    h2 {
+      text-align: center;
+      margin: 30px 0 10px;
+      font-weight: 700;
+      color: #d4145a;
+    }
+    .section {
+      max-width: 980px;
+      margin: auto;
+      padding: 0 12px 40px;
+    }
+    .event-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .event-card {
+      width: 155px;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(229,9,20,0.07);
+      cursor: pointer;
+      text-align: center;
+      transition: transform 0.15s ease;
+      user-select: none;
+    }
+    .event-card:hover {
+      transform: translateY(-6px) scale(1.04);
+      box-shadow: 0 12px 30px rgba(229,9,20,0.2);
+      background: #fff0f7;
+    }
+    .event-card img {
+      width: 100%;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 12px 12px 0 0;
+    }
+    .event-card p {
+      margin: 12px 8px 14px 8px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: #2d2d2d;
+    }
+  </style>
+</head>
+<body>
+  <header>All Sports</header>
+
+  <section class="section">
+    <h2>Men's Sports</h2>
+    <div class="event-list" id="mensSportsList"></div>
+  </section>
+
+  <section class="section">
+    <h2>Women's Sports</h2>
+    <div class="event-list" id="womensSportsList"></div>
+  </section>
+
+  <script>
+    const mensSports = [
+      { id: "Football", title: "Football", img: "images/football.jpeg" },
+      { id: "Cricket", title: "Cricket", img: "images/cricket.jpeg" },
+      { id: "Kabaddi", title: "Kabaddi", img: "images/kabaddi.jpg" },
+      { id: "Hockey", title: "Hockey", img: "images/hockey.jpeg" },
+      { id: "Volleyball", title: "Volleyball", img: "images/valleyball.jpeg" },
+      { id: "Basketball", title: "Basketball", img: "images/basketball.jpeg" },
+      { id: "Tennis", title: "Tennis", img: "images/tennis.jpeg" },
+      { id: "Table Tennis", title: "Table Tennis", img: "images/tabletennis.jpeg" },
+      { id: "Baseball", title: "Baseball", img: "images/baseball.jpeg" },
+      { id: "Golf", title: "Golf", img: "images/golf.jpeg" },
+      { id: "Swimming", title: "Swimming", img: "images/swimming.jpeg" },
+      { id: "Athletics", title: "Athletics", img: "images/athletics.jpeg" },
+      { id: "Boxing", title: "Boxing", img: "images/boxing.jpeg" },
+      { id: "Wrestling", title: "Wrestling", img: "images/wrestling.jpeg" },
+      { id: "Cycling", title: "Cycling", img: "images/cycling.jpeg" },
+      { id: "Badminton", title: "Badminton", img: "images/badminton.jpeg" },
+      { id: "Rugby", title: "Rugby", img: "images/rugby.jpeg" },
+      { id: "Weightlifting", title: "Weightlifting", img: "images/weightlifting.jpeg" },
+      { id: "Fencing", title: "Fencing", img: "images/fencing.jpeg" }
+    ];
+
+    const womensSports = [
+      { id: "Football (Women)", title: "Football", img: "images/football.jpeg" },
+      { id: "Cricket (Women)", title: "Cricket", img: "images/cricket.jpeg" },
+      { id: "Kabaddi (Women)", title: "Kabaddi", img: "images/kabaddi_womens.jpeg" },
+      { id: "Hockey (Women)", title: "Hockey", img: "images/hockey.jpeg" },
+      { id: "Volleyball (Women)", title: "Volleyball", img: "images/valleyball.jpeg" },
+      { id: "Basketball (Women)", title: "Basketball", img: "images/basketball.jpeg" },
+      { id: "Tennis (Women)", title: "Tennis", img: "images/tennis.jpeg" },
+      { id: "Table Tennis (Women)", title: "Table Tennis", img: "images/tabletennis.jpeg" },
+      { id: "Baseball (Women)", title: "Baseball", img: "images/baseball.jpeg" },
+      { id: "Golf (Women)", title: "Golf", img: "images/golf.jpeg" },
+      { id: "Swimming (Women)", title: "Swimming", img: "images/swimming.jpeg" },
+      { id: "Athletics (Women)", title: "Athletics", img: "images/athletics.jpeg" },
+      { id: "Boxing (Women)", title: "Boxing", img: "images/boxing.jpeg" },
+      { id: "Wrestling (Women)", title: "Wrestling", img: "images/wrestling.jpeg" },
+      { id: "Cycling (Women)", title: "Cycling", img: "images/cycling.jpeg" },
+      { id: "Badminton (Women)", title: "Badminton", img: "images/badminton.jpeg" },
+      { id: "Rugby (Women)", title: "Rugby", img: "images/rugby_womens.jpeg" },
+      { id: "Weightlifting (Women)", title: "Weightlifting", img: "images/weightlifting_womens.jpeg" },
+      { id: "Fencing (Women)", title: "Fencing", img: "images/fencing.jpeg" }
+    ];
+
+    function renderCategory(containerId, items, category) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = "";
+      items.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "event-card";
+        card.innerHTML = `<img src="${item.img}" alt="${item.title}"><p>${item.title}</p>`;
+        card.onclick = () => {
+          localStorage.setItem("selectedEventId", item.id);
+          localStorage.setItem("selectedEventTitle", item.title);
+          localStorage.setItem("selectedCategory", category);
+          window.location.href = "select-location.html";
+        };
+        container.appendChild(card);
+      });
+    }
+
+    renderCategory("mensSportsList", mensSports, "Sport");
+    renderCategory("womensSportsList", womensSports, "Sport");
+  </script>
+</body>
+</html>
